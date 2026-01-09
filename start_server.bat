@@ -49,11 +49,11 @@ echo.
 echo [4/4] Installing/checking required packages...
 
 REM Check if cryptography is installed
-python -c "import cryptography" >nul 2>&1
+.venv\Scripts\python.exe -c "import cryptography" >nul 2>&1
 if errorlevel 1 (
     echo Installing cryptography...
-    python -m pip install --upgrade pip >nul 2>&1
-    python -m pip install cryptography
+    .venv\Scripts\python.exe -m pip install --upgrade pip >nul 2>&1
+    .venv\Scripts\python.exe -m pip install cryptography
     if errorlevel 1 (
         echo [ERROR] Failed to install cryptography!
         pause
@@ -71,7 +71,7 @@ echo ========================================
 echo.
 
 REM Start the multichannel server
-python server_multichannel.py
+.venv\Scripts\python.exe server_multichannel.py
 
 REM If server exits, pause so user can see any error messages
 if errorlevel 1 (

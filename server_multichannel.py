@@ -225,6 +225,32 @@ def handle_client(conn, addr):
                 if text is None:
                     text = "[Decryption failed]"
                 
+                # Handle /ban command
+                if text.startswith("/ban "):
+                    target_name = text[5:].strip()
+                    if target_name:
+                        # Add to banned list
+                        channel['banned'].add(target_name)
+                        ban_msg = f"\033[91m{target_name} has been banned by {name}\033[0m"
+                        print(f"[{channel_name}] {ban_msg}")
+                        
+                        # Find and disconnect the banned user
+                        for c, (uname, ucolor) in list(channel['clients'].items()):
+                            if uname == target_name:
+                                try:
+                                    c.send(f"{ban_msg}\n".encode())
+                                    c.send(b"BANNED\n")
+                                    c.close()
+                                except:
+                                    pass
+                                release_color(channel, ucolor)
+                                del channel['clients'][c]
+                                break
+                        
+                        # Broadcast ban message to all
+                        broadcast(channel, f"{ban_msg}\n".encode())
+                    continue
+                
                 # Format message with color
                 if channel['colors_enabled']:
                     out = f"{color}{name}: {text}{RESET}\n"
@@ -320,6 +346,8 @@ def server_commands():
             print("  /stats    - Show server statistics")
             print("  /help     - Show this help")
             print("  /exit     - Shutdown server\n")
+            print("\033[96mUser Commands (in chat):\033[0m")
+            print("  /ban <username> - Ban a user from the channel\n")
 
 # Start server
 s = socket.socket()
