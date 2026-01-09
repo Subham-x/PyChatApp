@@ -4,6 +4,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import padding
 import hashlib
+import urllib.request
 
 # ---------- console clear ----------
 def clear_console():
@@ -29,6 +30,26 @@ HOST = {
     "2": "0.0.0.0",
     "3": "0.0.0.0"
 }.get(mode, "0.0.0.0")
+
+# Get and display IPs
+if mode == "3":
+    print(f"\n[Fetching your public IP...]")
+    try:
+        public_ip = urllib.request.urlopen('https://api.ipify.org', timeout=5).read().decode('utf8')
+        print(f"\033[92m[Your Public IP: {public_ip}]\033[0m")
+        print(f"\033[93m[Clients should connect to: {public_ip}]\033[0m")
+        print(f"\033[93m[Remember to port forward port {PORT} in your router!]\033[0m")
+    except Exception as e:
+        print(f"\033[91m[Could not fetch public IP: {str(e)}]\033[0m")
+        print(f"\033[93m[Find your public IP at: https://whatismyip.com]\033[0m")
+elif mode == "2":
+    try:
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+        print(f"\n\033[92m[Your Local IP: {local_ip}]\033[0m")
+        print(f"\033[93m[Clients on same network should connect to: {local_ip}]\033[0m")
+    except:
+        pass
 
 print(f"\n[Server configured with AES-128 encryption]")
 print(f"[Multi-channel support enabled]")
