@@ -31,25 +31,50 @@ HOST = {
     "3": "0.0.0.0"
 }.get(mode, "0.0.0.0")
 
-# Get and display IPs
-if mode == "3":
-    print(f"\n[Fetching your public IP...]")
-    try:
-        public_ip = urllib.request.urlopen('https://api.ipify.org', timeout=5).read().decode('utf8')
-        print(f"\033[92m[Your Public IP: {public_ip}]\033[0m")
-        print(f"\033[93m[Clients should connect to: {public_ip}]\033[0m")
-        print(f"\033[93m[Remember to port forward port {PORT} in your router!]\033[0m")
-    except Exception as e:
-        print(f"\033[91m[Could not fetch public IP: {str(e)}]\033[0m")
-        print(f"\033[93m[Find your public IP at: https://whatismyip.com]\033[0m")
+# Get and display IPs with easy sharing format
+if mode == "1":
+    share_ip = "127.0.0.1"
+    print(f"\n\033[96m{'='*50}\033[0m")
+    print(f"\033[96m           LOCALHOST MODE\033[0m")
+    print(f"\033[96m{'='*50}\033[0m")
+    print(f"\n\033[93m  Share this IP with clients on SAME PC:\033[0m")
+    print(f"\n  ┌{'─'*46}┐")
+    print(f"  │  \033[92m{share_ip:^44}\033[0m  │")
+    print(f"  └{'─'*46}┘\n")
 elif mode == "2":
     try:
         hostname = socket.gethostname()
         local_ip = socket.gethostbyname(hostname)
-        print(f"\n\033[92m[Your Local IP: {local_ip}]\033[0m")
-        print(f"\033[93m[Clients on same network should connect to: {local_ip}]\033[0m")
-    except:
-        pass
+        share_ip = local_ip
+        print(f"\n\033[96m{'='*50}\033[0m")
+        print(f"\033[96m           LAN MODE (Same WiFi/Network)\033[0m")
+        print(f"\033[96m{'='*50}\033[0m")
+        print(f"\n\033[93m  Share this IP with clients on SAME NETWORK:\033[0m")
+        print(f"\n  ┌{'─'*46}┐")
+        print(f"  │  \033[92m{share_ip:^44}\033[0m  │")
+        print(f"  └{'─'*46}┘\n")
+        print(f"\033[90m  (All devices must be on same WiFi)\033[0m\n")
+    except Exception as e:
+        print(f"\n\033[91m[Could not get local IP: {str(e)}]\033[0m")
+        share_ip = "Unknown"
+elif mode == "3":
+    print(f"\n\033[96m[Fetching your public IP...]\033[0m")
+    try:
+        public_ip = urllib.request.urlopen('https://api.ipify.org', timeout=5).read().decode('utf8')
+        share_ip = public_ip
+        print(f"\n\033[96m{'='*50}\033[0m")
+        print(f"\033[96m           INTERNET MODE\033[0m")
+        print(f"\033[96m{'='*50}\033[0m")
+        print(f"\n\033[93m  Share this IP with clients ANYWHERE:\033[0m")
+        print(f"\n  ┌{'─'*46}┐")
+        print(f"  │  \033[92m{share_ip:^44}\033[0m  │")
+        print(f"  └{'─'*46}┘\n")
+        print(f"\033[91m  ⚠ IMPORTANT: Port forward port {PORT} in your router!\033[0m")
+        print(f"\033[90m  (Router settings → Port Forwarding → TCP {PORT})\033[0m\n")
+    except Exception as e:
+        print(f"\n\033[91m[Could not fetch public IP: {str(e)}]\033[0m")
+        print(f"\033[93m[Find your IP at: https://whatismyip.com]\033[0m")
+        share_ip = "Unknown"
 
 print(f"\n[Server configured with AES-128 encryption]")
 print(f"[Multi-channel support enabled]")

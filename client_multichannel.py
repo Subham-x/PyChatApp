@@ -21,14 +21,21 @@ BLUE = "\033[96m"
 
 clear_console()
 
-print(f"{BLUE}{'='*50}{RESET}")
-print(f"{BLUE}    PyChat Client - Multi-Channel Support{RESET}")
-print(f"{BLUE}{'='*50}{RESET}\n")
+print(f"{BLUE}{'='*60}{RESET}")
+print(f"{BLUE}        PyChat Client - Multi-Channel Support{RESET}")
+print(f"{BLUE}{'='*60}{RESET}\n")
 
-print(f"{ORANGE}Step 1: Connect to Server{RESET}")
-print(f"{ORANGE}(Press Enter to use localhost){RESET}\n")
+print(f"{GREEN}╔{'═'*58}╗{RESET}")
+print(f"{GREEN}║  {ORANGE}Step 1: Enter Server IP Address{GREEN:>27}║{RESET}")
+print(f"{GREEN}╚{'═'*58}╝{RESET}\n")
 
-SERVER_IP = input(f"{BLUE}Server IP address [127.0.0.1]: {RESET}").strip() or "127.0.0.1"
+print(f"{ORANGE}Examples:{RESET}")
+print(f"  • Same PC:      {BLUE}127.0.0.1{RESET}")
+print(f"  • Same WiFi:    {BLUE}192.168.1.100{RESET}")
+print(f"  • Internet:     {BLUE}103.182.10.147{RESET}")
+print(f"\n{ORANGE}(Press Enter for localhost: 127.0.0.1){RESET}\n")
+
+SERVER_IP = input(f"{GREEN}➤ Server IP: {RESET}").strip() or "127.0.0.1"
 PORT = 5000
 
 print(f"\n{ORANGE}Note: Channel name & PIN will be asked after connection{RESET}")
